@@ -1,15 +1,18 @@
 {
-  "name": "tuition-escrow",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "turbo": "^2.5.3"
-  }
+	"name": "tuition-escrow",
+	"private": true,
+	"version": "0.1.0",
+	"workspaces": [
+		"app",
+		"contracts"
+	],
+	"scripts": {
+		"dev": "turbo run dev",
+		"build": "turbo run build",
+		"lint": "turbo run lint",
+		"test": "turbo run test"
+	},
+	"devDependencies": {
+		"turbo": "^1.13.0"
+	}
 }
