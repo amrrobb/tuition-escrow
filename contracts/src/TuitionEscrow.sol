@@ -2,7 +2,6 @@
 pragma solidity ^0.8.26;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
@@ -13,16 +12,25 @@ contract TuitionEscrow is Ownable, ReentrancyGuard {
     /// @notice Stablecoin used for payments (e.g. USDC)
     IERC20 public immutable stablecoin;
 
+    /// @notice Enum to define the status of a payment
+    enum PaymentStatus {
+        Initialized, // Payment created but not deposited
+        Deposited, // Funds deposited and awaiting release or refund
+        Released, // Funds released to university
+        Refunded // Funds returned to payer
+
+    }
+
     struct Payment {
-        uint256 amount; // Payment amount in stablecoin
         address payer; // Student address
         address university; // University address
-        bool isActive; // Payment status
+        PaymentStatus status; // Payment status
+        uint256 amount; // Payment amount in stablecoin
         string invoiceRef; // Invoice identifier
     }
 
     /// @notice Stores all payment details
-    mapping(uint256 => Payment) public payments;
+    mapping(uint256 id => Payment) public payments;
 
     /// @notice Tracks total number of payments
     uint256 public paymentCounter;
@@ -51,8 +59,8 @@ contract TuitionEscrow is Ownable, ReentrancyGuard {
     /// @notice Error for when the deposit amount is invalid
     error InvalidAmount();
 
-    /// @notice Error for when the payment ID is invalid
-    error InvalidPaymentId();
+    /// @notice Error for when the payer is invalid
+    error InvalidPayer();
 
     /// @notice Sets up the contract with specified stablecoin
     /// @param _stablecoin Address of the stablecoin contract
@@ -76,15 +84,15 @@ contract TuitionEscrow is Ownable, ReentrancyGuard {
     ) external onlyOwner returns (uint256) {
         if (amount == 0) revert InvalidAmount();
 
-        uint256 paymentId = paymentCounter++;
+        uint256 paymentId = paymentCounter + 1;
         payments[paymentId] = Payment({
             payer: payer,
             university: university,
             amount: amount,
             invoiceRef: invoiceRef,
-            isActive: true
+            status: PaymentStatus.Initialized
         });
-
+        paymentCounter = paymentId;
         return paymentId;
     }
 
@@ -94,9 +102,10 @@ contract TuitionEscrow is Ownable, ReentrancyGuard {
         uint256 paymentId
     ) external nonReentrant {
         Payment storage payment = payments[paymentId];
-        if (!payment.isActive) revert PaymentAlreadyProcessed();
-        if (payment.payer != msg.sender) revert InvalidPaymentId();
+        if (payment.payer != msg.sender) revert InvalidPayer();
+        if (payment.status != PaymentStatus.Initialized) revert PaymentAlreadyProcessed();
 
+        payment.status = PaymentStatus.Deposited;
         if (!stablecoin.transferFrom(msg.sender, address(this), payment.amount)) {
             revert TransferFailed();
         }
@@ -111,9 +120,9 @@ contract TuitionEscrow is Ownable, ReentrancyGuard {
         uint256 paymentId
     ) external onlyOwner nonReentrant {
         Payment storage payment = payments[paymentId];
-        if (!payment.isActive) revert PaymentAlreadyProcessed();
+        if (payment.status != PaymentStatus.Deposited) revert PaymentAlreadyProcessed();
 
-        payment.isActive = false;
+        payment.status = PaymentStatus.Released;
         if (!stablecoin.transfer(payment.university, payment.amount)) revert TransferFailed();
 
         emit Released(paymentId, payment.university, payment.amount);
@@ -125,9 +134,9 @@ contract TuitionEscrow is Ownable, ReentrancyGuard {
         uint256 paymentId
     ) external onlyOwner nonReentrant {
         Payment storage payment = payments[paymentId];
-        if (!payment.isActive) revert PaymentAlreadyProcessed();
+        if (payment.status != PaymentStatus.Deposited) revert PaymentAlreadyProcessed();
 
-        payment.isActive = false;
+        payment.status = PaymentStatus.Refunded;
         if (!stablecoin.transfer(payment.payer, payment.amount)) revert TransferFailed();
         emit Refunded(paymentId, payment.payer, payment.amount);
     }

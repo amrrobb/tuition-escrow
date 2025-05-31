@@ -4,7 +4,7 @@ pragma solidity ^0.8.26;
 import {TuitionEscrow} from "../../src/TuitionEscrow.sol";
 
 // Malicious university contract that tries to reenter the escrow
-contract MockMaliciousUniversity {
+contract MaliciousUniversity {
     TuitionEscrow public escrow;
     uint256 public paymentId;
 
