@@ -1,0 +1,35 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: TuitionEscrow
+    network: arbitrum-sepolia
+    source:
+      address: "0xFAF135D9eb6683968cC7711DfD9441919671b039"
+      abi: TuitionEscrow
+      startBlock: 158521053
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Deposited
+        - OwnershipTransferred
+        - Refunded
+        - Released
+      abis:
+        - name: TuitionEscrow
+          file: ./abis/TuitionEscrow.json
+      eventHandlers:
+        - event: Deposited(indexed uint256,indexed address,indexed address,uint256,string)
+          handler: handleDeposited
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Refunded(indexed uint256,indexed address,uint256)
+          handler: handleRefunded
+        - event: Released(indexed uint256,indexed address,uint256)
+          handler: handleReleased
+      file: ./src/tuition-escrow.ts
