@@ -17,7 +17,6 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Deposited
-        - OwnershipTransferred
         - Refunded
         - Released
       abis:
@@ -26,8 +25,6 @@ dataSources:
       eventHandlers:
         - event: Deposited(indexed uint256,indexed address,indexed address,uint256,string)
           handler: handleDeposited
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
         - event: Refunded(indexed uint256,indexed address,uint256)
           handler: handleRefunded
         - event: Released(indexed uint256,indexed address,uint256)

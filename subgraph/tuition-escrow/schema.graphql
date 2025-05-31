@@ -1,40 +1,11 @@
-type Deposited @entity(immutable: true) {
-  id: Bytes!
-  paymentId: BigInt! # uint256
-  payer: Bytes! # address
-  university: Bytes! # address
-  amount: BigInt! # uint256
-  invoiceRef: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type OwnershipTransferred @entity(immutable: true) {
-  id: Bytes!
-  previousOwner: Bytes! # address
-  newOwner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Refunded @entity(immutable: true) {
-  id: Bytes!
-  paymentId: BigInt! # uint256
-  payer: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Released @entity(immutable: true) {
-  id: Bytes!
-  paymentId: BigInt! # uint256
-  university: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type Payment @entity {
+	id: ID! # Unique identifier (e.g., paymentId)
+	paymentId: String! # From event params
+	payer: Bytes! # Address of the payer (student)
+	university: Bytes! # Address of the university
+	amount: BigInt! # Payment amount in stablecoin
+	invoiceRef: String! # Invoice identifier
+	status: String! # Enum: Initialized, Deposited, Released, Refunded
+	createdBlockTimestamp: BigInt!
+	updatedBlockTimestamp: BigInt!
 }
