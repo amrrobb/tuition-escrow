@@ -1,8 +1,8 @@
 {
-  "arbitrum-sepolia": {
-    "TuitionEscrow": {
-      "address": "0xFAF135D9eb6683968cC7711DfD9441919671b039",
-      "startBlock": 158521053
-    }
-  }
+	"arbitrum-sepolia": {
+		"TuitionEscrow": {
+			"address": "0xF4e4A3Eba75DAb37E2cAC7694a3b5F0965CC70f9",
+			"startBlock": 159104017
+		}
+	}
 }

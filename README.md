@@ -18,7 +18,7 @@ This blockchain-based escrow system for educational institutions and students fe
 
 | Contract      | Address                                      | Explorer                                                                                           |
 | ------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| TuitionEscrow | `0xFAF135D9eb6683968cC7711DfD9441919671b039` | [View on Arbiscan](https://sepolia.arbiscan.io/address/0xFAF135D9eb6683968cC7711DfD9441919671b039) |
+| TuitionEscrow | `0xF4e4A3Eba75DAb37E2cAC7694a3b5F0965CC70f9` | [View on Arbiscan](https://sepolia.arbiscan.io/address/0xF4e4A3Eba75DAb37E2cAC7694a3b5F0965CC70f9) |
 | USDC (Mock)   | `0xD4462a6e718f217BF41030165E1b64E235482AA0` | [View on Arbiscan](https://sepolia.arbiscan.io/address/0xD4462a6e718f217BF41030165E1b64E235482AA0) |
 
 ## 🔍 Key Resources
@@ -51,7 +51,7 @@ tuition-escrow/
 │   ├── test/           # Contract test suite
 │   ├── .env            # Environment variables (not committed)
 │   └── Makefile        # Build and deployment automation
-├── subgraphs/          # TheGraph indexing services
+├── subgraph/           # TheGraph indexing services
 ├── package.json        # Project dependencies and scripts
 └── README.md           # Project documentation
 ```
@@ -135,7 +135,7 @@ The live demo uses the following contract configuration. Update these values if 
 // app/src/constants/contract/contract-address.json
 {
 	"421614": {
-		"TuitionEscrow": "0xFAF135D9eb6683968cC7711DfD9441919671b039",
+		"TuitionEscrow": "0xF4e4A3Eba75DAb37E2cAC7694a3b5F0965CC70f9",
 		"USDC": "0xD4462a6e718f217BF41030165E1b64E235482AA0"
 	}
 }
@@ -212,7 +212,7 @@ These files contain the interface definitions needed for interacting with the de
 ## 🎥 Video Walkthrough
 
 > A 3–5 minute video covering contract deployment, frontend demo, and subgraph queries.  
-> _Replace this line with the actual video link._
+> [Watch the demo video](https://youtu.be/276fG23WMoA)
 
 ---
 
