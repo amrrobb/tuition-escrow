@@ -11,17 +11,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { WalletConnect } from "@/components/WalletConnect";
 import { toast } from "@/hooks/use-toast";
-import { GraduationCap, Coins, ArrowLeft, DollarSign } from "lucide-react";
+import { Coins, ArrowLeft, DollarSign } from "lucide-react";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import {
-	ContractName,
-	getContractAddress,
-} from "@/constants/contract/contract-address";
-import { Address } from "viem";
 import { useMint } from "@/hooks/useMint";
 
 export default function Faucet() {
@@ -29,7 +23,7 @@ export default function Faucet() {
 
 	const [amount, setAmount] = useState("1000");
 	const [isLoading, setIsLoading] = useState(false);
-	const { mint, isPending, isSuccess, isError, error } = useMint();
+	const { mint } = useMint();
 
 	const handleMint = async () => {
 		if (!isConnected || !address) {
@@ -54,15 +48,6 @@ export default function Faucet() {
 
 		try {
 			// Mock USDC faucet contract address for Arbitrum Sepolia
-			// const faucetAddress = getContractAddress(
-			// 	chainId,
-			// 	ContractName.USDC
-			// ) as Address; // Replace with actual faucet contract
-
-			// This would be the actual contract interaction
-			// For now, showing a success message
-
-			// await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate transaction time
 			await mint({
 				amount: amount.toString(),
 				receiver: address,
@@ -71,9 +56,6 @@ export default function Faucet() {
 				title: "USDC Minted Successfully!",
 				description: `${amount} USDC has been minted to your wallet`,
 			});
-
-			// Refresh balance after minting
-			// refreshBalance();
 		} catch (error) {
 			console.error("Minting failed:", error);
 			toast({
@@ -189,14 +171,6 @@ export default function Faucet() {
 											⚠️ Please switch to Arbitrum Sepolia network to use the
 											faucet
 										</p>
-										{/* <Button
-											onClick={switchToArbitrumSepolia}
-											variant="outline"
-											size="sm"
-											className="mt-2 border-orange-200 text-orange-600 hover:bg-orange-50"
-										>
-											Switch to Arbitrum Sepolia
-										</Button> */}
 									</div>
 								)}
 
@@ -278,7 +252,7 @@ export default function Faucet() {
 							<CardContent className="space-y-3 text-sm text-slate-600 dark:text-slate-300">
 								<p>• Connect your wallet to Arbitrum Sepolia</p>
 								<p>• Enter the amount of USDC you need</p>
-								<p>• Click "Mint" to receive tokens instantly</p>
+								<p>• Click &quot;Mint&quot; to receive tokens instantly</p>
 								<p>• Use tokens for testing payments</p>
 							</CardContent>
 						</Card>

@@ -1,4 +1,6 @@
-export const MockTokenABI: any[] = [
+import type { Abi } from "viem";
+
+export const MockTokenABI: Abi = [
 	{
 		type: "constructor",
 		inputs: [

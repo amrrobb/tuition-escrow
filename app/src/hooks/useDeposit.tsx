@@ -163,12 +163,12 @@ export const useDeposit = () => {
 				}
 
 				// Get paymentCounter as a starting point
-				let paymentId = (await readContract(wagmiConfig, {
+				const paymentId = (await readContract(wagmiConfig, {
 					address: TuitionEscrowAddress,
 					abi: TuitionEscrowABI,
 					functionName: "paymentCounter",
 					args: [],
-				})) as any;
+				})) as bigint;
 
 				setSteps((prev) =>
 					prev.map((item) => {

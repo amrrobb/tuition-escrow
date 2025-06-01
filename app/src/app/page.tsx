@@ -28,11 +28,10 @@ export default function Home() {
 	const isAdmin = isConnected && adminAddress == getAddress(address as string);
 
 	useEffect(() => {
-		console.log("admin", address);
 		if (isAdmin) {
 			setActiveTab("admin");
 		}
-	}, [isAdmin]);
+	}, [isAdmin, address]);
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-900 dark:via-gray-800 dark:to-black transition-colors duration-300">

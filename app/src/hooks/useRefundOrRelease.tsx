@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { waitForTransactionReceipt, writeContract } from "wagmi/actions";
 import { useState } from "react";
 import { Address } from "viem";
-import { useAccount, useChainId } from "wagmi";
+import { useChainId } from "wagmi";
 import {
 	ContractName,
 	getContractAddress,

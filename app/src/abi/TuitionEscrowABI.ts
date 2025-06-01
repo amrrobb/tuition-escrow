@@ -1,4 +1,6 @@
-export const TuitionEscrowABI: any[] = [
+import type { Abi } from "viem";
+
+export const TuitionEscrowABI: Abi = [
 	{
 		type: "constructor",
 		inputs: [{ name: "_stablecoin", type: "address", internalType: "address" }],
