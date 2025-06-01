@@ -1,101 +1,245 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { PaymentForm } from "@/components/PaymentForm";
+import { AdminPanel } from "@/components/AdminPanel";
+import { FeatureCards } from "@/components/FeatureCards";
+import { GraduationCap, Shield, DollarSign } from "lucide-react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import { getAddress } from "viem";
+import Link from "next/link";
+import { useDeposit } from "@/hooks/useDeposit";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+	const { address, isConnected } = useAccount();
+	const [activeTab, setActiveTab] = useState("payment");
+	const [showFeatures, setShowFeatures] = useState(false); // Can be toggled later
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+	const { mutation: deposit } = useDeposit();
+
+	// Updated admin addresses including the new one
+	const adminAddress = getAddress("0x77C037fbF42e85dB1487B390b08f58C00f438812");
+	const isAdmin = isConnected && adminAddress == getAddress(address as string);
+
+	useEffect(() => {
+		console.log("admin", address);
+		if (isAdmin) {
+			setActiveTab("admin");
+		}
+	}, [isAdmin]);
+
+	return (
+		<div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-900 dark:via-gray-800 dark:to-black transition-colors duration-300">
+			{/* Header */}
+			<header className="border-b border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg shadow-lg">
+				<div className="container mx-auto px-4 py-4">
+					<div className="flex items-center justify-between">
+						<div className="flex items-center space-x-3">
+							<div className="p-2 bg-gradient-to-br from-gray-800 to-black rounded-xl shadow-lg hover:scale-110 transition-transform duration-200">
+								<GraduationCap className="h-6 w-6 text-white" />
+							</div>
+							<div>
+								<h1 className="text-xl font-bold bg-gradient-to-r from-gray-800 to-black bg-clip-text text-transparent dark:from-gray-200 dark:to-white">
+									TuitionPay
+								</h1>
+								<p className="text-sm text-gray-600 dark:text-gray-400">
+									Cross-border Education Payments
+								</p>
+							</div>
+						</div>
+
+						<div className="flex items-center space-x-4">
+							<Button
+								variant="outline"
+								size="sm"
+								asChild
+								className="h-9 px-4 py-2 text-sm font-semibold rounded-xl bg-white/80 dark:bg-gray-800/80 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 hover:scale-105 hover:shadow-lg transition-all duration-200"
+							>
+								<Link href="/faucet" className="flex items-center space-x-2">
+									<DollarSign className="h-4 w-4" />
+									<span>Get USDC</span>
+								</Link>
+							</Button>
+
+							<ConnectButton.Custom>
+								{({
+									account,
+									chain,
+									openConnectModal,
+									openChainModal,
+									openAccountModal,
+									mounted,
+								}) => {
+									const ready = mounted;
+									const connected = ready && account && chain;
+
+									return (
+										<div
+											{...(!ready && {
+												"aria-hidden": true,
+												style: {
+													opacity: 0,
+													pointerEvents: "none",
+													userSelect: "none",
+												},
+											})}
+										>
+											{(() => {
+												const commonClass =
+													"h-9 px-4 py-2 text-sm font-semibold rounded-xl bg-[#111] text-white hover:bg-[#1c1c1c] hover:scale-105 hover:shadow-lg transition-all duration-200";
+
+												if (!connected) {
+													return (
+														<button
+															onClick={openConnectModal}
+															className={commonClass}
+														>
+															Connect Wallet
+														</button>
+													);
+												}
+
+												if (chain.unsupported) {
+													return (
+														<button
+															onClick={openChainModal}
+															className={`${commonClass} bg-red-600 hover:bg-red-700`}
+														>
+															Wrong Network
+														</button>
+													);
+												}
+
+												return (
+													<button
+														onClick={openAccountModal}
+														className={commonClass}
+													>
+														{account.displayName}
+													</button>
+												);
+											})()}
+										</div>
+									);
+								}}
+							</ConnectButton.Custom>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			{/* Hero Section */}
+			<section className="py-16">
+				<div className="container mx-auto px-4 text-center">
+					<div className="max-w-4xl mx-auto">
+						<h2 className="text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+							Secure Cross-Border
+							<span className="bg-gradient-to-r from-gray-800 to-black bg-clip-text text-transparent dark:from-gray-200 dark:to-white block">
+								Tuition Payments
+							</span>
+						</h2>
+						<p className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+							Pay university fees securely with USDC. Funds are held in escrow
+							until approved by the institution, ensuring safe and transparent
+							educational payments worldwide.
+						</p>
+					</div>
+
+					{/* Feature Cards - Hidden by default, can be shown later */}
+					{/* {showFeatures && <FeatureCards />} */}
+				</div>
+			</section>
+
+			{/* Main Content */}
+			<section className="pb-16">
+				<div className="container mx-auto px-4">
+					{!isConnected ? (
+						<Card className="max-w-md mx-auto border border-gray-200 dark:border-gray-700 shadow-2xl bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm hover:shadow-3xl hover:scale-105 transition-all duration-300">
+							<CardHeader className="text-center space-y-4">
+								<div className="w-20 h-20 bg-gradient-to-br from-gray-800 to-black rounded-2xl flex items-center justify-center mx-auto shadow-lg hover:scale-110 transition-transform duration-200">
+									<GraduationCap className="h-10 w-10 text-white" />
+								</div>
+								<CardTitle className="text-2xl text-gray-900 dark:text-white">
+									Connect Your Wallet
+								</CardTitle>
+								<CardDescription className="text-gray-600 dark:text-gray-300">
+									Connect your wallet to start making secure tuition payments
+									with blockchain technology
+								</CardDescription>
+							</CardHeader>
+							<CardContent className="text-center space-y-4">
+								<div className="flex justify-center">
+									<ConnectButton />
+								</div>
+								<p className="text-xs text-gray-500 dark:text-gray-400">
+									Supports MetaMask and other Web3 wallets
+								</p>
+							</CardContent>
+						</Card>
+					) : (
+						<Tabs
+							value={activeTab}
+							onValueChange={setActiveTab}
+							className="max-w-6xl mx-auto"
+						>
+							<TabsList className="grid w-full grid-cols-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg">
+								<TabsTrigger
+									value="payment"
+									className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-800 data-[state=active]:to-black data-[state=active]:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 hover:scale-105"
+								>
+									Make Payment
+								</TabsTrigger>
+								<TabsTrigger
+									value="admin"
+									disabled={!isAdmin}
+									className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-800 data-[state=active]:to-black data-[state=active]:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 hover:scale-105"
+								>
+									Admin Panel{" "}
+									{isAdmin && (
+										<span className="ml-2 px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs rounded-full animate-pulse">
+											●
+										</span>
+									)}
+								</TabsTrigger>
+							</TabsList>
+
+							<TabsContent value="payment" className="mt-8">
+								<PaymentForm account={address as string} />
+							</TabsContent>
+
+							<TabsContent value="admin" className="mt-8">
+								{isAdmin ? (
+									<AdminPanel />
+								) : (
+									<Card className="border border-gray-200 dark:border-gray-700 shadow-xl bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
+										<CardHeader className="text-center">
+											<div className="w-16 h-16 bg-gradient-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
+												<Shield className="h-8 w-8 text-white" />
+											</div>
+											<CardTitle className="text-xl text-gray-900 dark:text-white">
+												Access Denied
+											</CardTitle>
+											<CardDescription className="text-gray-600 dark:text-gray-300">
+												You need admin privileges to access this panel
+											</CardDescription>
+										</CardHeader>
+									</Card>
+								)}
+							</TabsContent>
+						</Tabs>
+					)}
+				</div>
+			</section>
+		</div>
+	);
 }
