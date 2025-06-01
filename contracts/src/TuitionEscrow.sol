@@ -81,7 +81,7 @@ contract TuitionEscrow is Ownable, ReentrancyGuard {
         address university,
         uint256 amount,
         string calldata invoiceRef
-    ) external onlyOwner returns (uint256) {
+    ) external returns (uint256) {
         if (amount == 0) revert InvalidAmount();
 
         uint256 paymentId = paymentCounter + 1;

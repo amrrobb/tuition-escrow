@@ -20,7 +20,10 @@
 		"build": "npm run build --prefix app",
 		"start": "npm run start --prefix app",
 		"setup": "npm run install:all && npm run compile",
-		"full:deploy": "npm run setup && npm run test && npm run deploy:verify && npm run build"
+		"full:deploy": "npm run setup && npm run test && npm run deploy:verify && npm run build",
+		"graph:build": "cd subgraph/tuition-escrow && graph codegen && graph build",
+		"graph:deploy": "cd subgraph/tuition-escrow && graph deploy tuition-escrow",
+		"graph:build-deploy": "npm run graph:build && npm run graph:deploy"
 	},
 	"repository": {
 		"type": "git",

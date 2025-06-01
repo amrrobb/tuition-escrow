@@ -8,9 +8,9 @@ dataSources:
     name: TuitionEscrow
     network: arbitrum-sepolia
     source:
-      address: "0xFAF135D9eb6683968cC7711DfD9441919671b039"
+      address: "0xF4e4A3Eba75DAb37E2cAC7694a3b5F0965CC70f9"
       abi: TuitionEscrow
-      startBlock: 158521053
+      startBlock: 159104017
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
