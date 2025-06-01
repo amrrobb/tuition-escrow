@@ -4,6 +4,7 @@ import {
 	ContractName,
 	getContractAddress,
 } from "@/constants/contract/contract-address";
+import { denormalize } from "@/lib/bignumber";
 import { wagmiConfig } from "@/lib/rainbowkit";
 import { useState } from "react";
 import { Address, erc20Abi } from "viem";
@@ -48,12 +49,14 @@ export function useMint() {
 				ContractName.USDC
 			) as Address;
 
+			const denormalizeUserAmount = denormalize(amount || "0", 6);
+
 			const receiverAddres = receiver || address;
 			const txHash = await writeContract(wagmiConfig, {
 				address: UsdcAddress,
 				abi: faucetAbi,
 				functionName: "mint",
-				args: [receiverAddres, amount],
+				args: [receiverAddres, denormalizeUserAmount],
 			});
 
 			const result = await waitForTransactionReceipt(wagmiConfig, {

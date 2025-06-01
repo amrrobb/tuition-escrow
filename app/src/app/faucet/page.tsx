@@ -142,16 +142,9 @@ export default function Faucet() {
 									Connect your wallet to mint testnet USDC tokens
 								</CardDescription>
 							</CardHeader>
-							{/* <CardContent className="text-center space-y-4">
-								<Button
-									onClick={connectWallet}
-									className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg"
-									size="lg"
-								>
-									Connect Wallet
-								</Button>
-							</CardContent> */}
-							<ConnectButton />
+							<div className="flex justify-center p-6">
+								<ConnectButton />
+							</div>
 						</Card>
 					) : (
 						<Card className="border-0 shadow-2xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">

@@ -25,7 +25,7 @@ import {
 	queryDepositedPayments,
 } from "@/graphql/payments.query";
 import { useQuery } from "@tanstack/react-query";
-import { REKT_SUBGRAPH_URL } from "@/constants/subgraph-url";
+import { SUBGRAPH_URL } from "@/constants/subgraph-url";
 import request from "graphql-request";
 import {
 	universitiesMap,
@@ -67,13 +67,9 @@ export const AdminPanel = () => {
 	} = useQuery({
 		queryKey: ["completedPayments"],
 		queryFn: () =>
-			request<{ payments: Payment[] }>(
-				REKT_SUBGRAPH_URL,
-				queryCompletedPayments,
-				{
-					first: 10,
-				}
-			),
+			request<{ payments: Payment[] }>(SUBGRAPH_URL, queryCompletedPayments, {
+				first: 10,
+			}),
 		select: (data) => {
 			const formattedPayments = data.payments.map((payment) => ({
 				id: payment.id,
@@ -101,13 +97,9 @@ export const AdminPanel = () => {
 	} = useQuery({
 		queryKey: ["depositedPayments"],
 		queryFn: () =>
-			request<{ payments: Payment[] }>(
-				REKT_SUBGRAPH_URL,
-				queryDepositedPayments,
-				{
-					first: 10,
-				}
-			),
+			request<{ payments: Payment[] }>(SUBGRAPH_URL, queryDepositedPayments, {
+				first: 10,
+			}),
 		select: (data) => {
 			const formattedPayments = data.payments.map((payment) => ({
 				id: payment.id,

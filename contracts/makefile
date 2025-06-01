@@ -32,6 +32,9 @@ test:
 lint:
 	forge fmt --check
 
+chain:
+	anvil --chain-id 31337
+
 # Deploy contracts to the specified network
 deploy: check-env
 	forge script script/Deploy.s.sol:Deploy --rpc-url $(network) --private-key $(PRIVATE_KEY) --broadcast

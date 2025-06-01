@@ -13,8 +13,8 @@ contract Deploy is Script {
     function run() public {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address usdcAddress;
-        try vm.envAddress("MOCK_USDC_ADDRESS") {
-            usdcAddress = vm.envAddress("MOCK_USDC_ADDRESS");
+        try vm.envAddress("USDC_ADDRESS") {
+            usdcAddress = vm.envAddress("USDC_ADDRESS");
         } catch {
             usdcAddress = address(0);
         }
@@ -32,8 +32,8 @@ contract Deploy is Script {
         // Deploy the TuitionEscrow contract with the USDC address as the stablecoin address
         escrow = new TuitionEscrow(address(usdc));
 
-        console.log("MOCKUSDC_ADDRESS=%s", address(usdc));
-        console.log("TUITIONESCROW_ADDRESS=%s", address(escrow));
+        console.log("USDC_ADDRESS=%s", address(usdc));
+        console.log("TUITION_ESCROW_ADDRESS=%s", address(escrow));
 
         vm.stopBroadcast();
     }

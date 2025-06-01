@@ -21,6 +21,8 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { Send, University, DollarSign, FileText } from "lucide-react";
 import { useDeposit } from "@/hooks/useDeposit";
 import { universitiesList } from "@/constants/universities";
+import { useUsdcBalance } from "@/hooks/useUsdcBalance";
+import { useAccount } from "wagmi";
 
 interface PaymentFormProps {
 	account: string | null;
@@ -31,7 +33,11 @@ export const PaymentForm = ({ account }: PaymentFormProps) => {
 	const [amount, setAmount] = useState<string>("");
 	const [invoiceRef, setInvoiceRef] = useState<string>("");
 	const [isLoading, setIsLoading] = useState(false);
+	const { address } = useAccount();
 	const { mutation: deposit } = useDeposit();
+	const { formattedBalance, refetch: refetchBalance } = useUsdcBalance(
+		address!
+	);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -81,8 +87,7 @@ export const PaymentForm = ({ account }: PaymentFormProps) => {
 					},
 				}
 			);
-
-			// Reset form
+			refetchBalance();
 			setSelectedUniversity("");
 			setAmount("");
 			setInvoiceRef("");
@@ -169,9 +174,11 @@ export const PaymentForm = ({ account }: PaymentFormProps) => {
 									min="0"
 									step="0.01"
 								/>
+								<div className="text-sm text-gray-500 mt-2">
+									Balance: {formattedBalance} USDC
+								</div>
 							</div>
 						</div>
-
 						<div className="space-y-2">
 							<Label
 								htmlFor="invoiceRef"
@@ -190,23 +197,6 @@ export const PaymentForm = ({ account }: PaymentFormProps) => {
 								/>
 							</div>
 						</div>
-
-						{/* <div className="space-y-2">
-							<Label
-								htmlFor="description"
-								className="text-gray-900 dark:text-white"
-							>
-								Description (Optional)
-							</Label>
-							<Textarea
-								id="description"
-								placeholder="Additional notes about this payment..."
-								value={description}
-								onChange={(e) => setDescription(e.target.value)}
-								rows={3}
-								className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200"
-							/>
-						</div> */}
 
 						<Button
 							type="submit"

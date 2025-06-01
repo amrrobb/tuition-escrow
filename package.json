@@ -7,10 +7,24 @@
 		"contracts"
 	],
 	"scripts": {
-		"dev": "turbo run dev",
-		"build": "turbo run build",
-		"lint": "turbo run lint",
-		"test": "turbo run test"
+		"install:all": "npm install --prefix app && cd contracts && forge install",
+		"compile": "cd contracts && make compile",
+		"chain": "cd contracts && make chain",
+		"test": "cd contracts && make test",
+		"lint": "npm run lint:frontend && npm run lint:contracts",
+		"lint:frontend": "npm run lint --prefix app",
+		"lint:contracts": "cd contracts && make lint",
+		"deploy": "cd contracts && make deploy",
+		"deploy:verify": "cd contracts && make deploy-verify",
+		"dev": "npm run dev --prefix app",
+		"build": "npm run build --prefix app",
+		"start": "npm run start --prefix app",
+		"setup": "npm run install:all && npm run compile",
+		"full:deploy": "npm run setup && npm run test && npm run deploy:verify && npm run build"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/amrrobb/tuition-escrow"
 	},
 	"devDependencies": {
 		"turbo": "^1.13.0"
