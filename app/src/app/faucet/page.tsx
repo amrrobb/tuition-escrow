@@ -17,24 +17,19 @@ import { GraduationCap, Coins, ArrowLeft, DollarSign } from "lucide-react";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import {
+	ContractName,
+	getContractAddress,
+} from "@/constants/contract/contract-address";
+import { Address } from "viem";
+import { useMint } from "@/hooks/useMint";
 
 export default function Faucet() {
-	// const {
-	// 	isConnected,
-	// 	account,
-	// 	balance,
-	// 	networkName,
-	// 	chainId,
-	// 	connectWallet,
-	// 	disconnect,
-	// 	switchToArbitrumSepolia,
-	// 	refreshBalance,
-	// 	getNetworkInfo,
-	// } = useWallet();
 	const { isConnected, chainId, address } = useAccount();
 
-	const [amount, setAmount] = useState("100");
+	const [amount, setAmount] = useState("1000");
 	const [isLoading, setIsLoading] = useState(false);
+	const { mint, isPending, isSuccess, isError, error } = useMint();
 
 	const handleMint = async () => {
 		if (!isConnected || !address) {
@@ -59,12 +54,19 @@ export default function Faucet() {
 
 		try {
 			// Mock USDC faucet contract address for Arbitrum Sepolia
-			const faucetAddress = "0x1234567890123456789012345678901234567890"; // Replace with actual faucet contract
+			// const faucetAddress = getContractAddress(
+			// 	chainId,
+			// 	ContractName.USDC
+			// ) as Address; // Replace with actual faucet contract
 
 			// This would be the actual contract interaction
 			// For now, showing a success message
-			await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate transaction time
 
+			// await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate transaction time
+			await mint({
+				amount: amount.toString(),
+				receiver: address,
+			});
 			toast({
 				title: "USDC Minted Successfully!",
 				description: `${amount} USDC has been minted to your wallet`,
@@ -214,10 +216,10 @@ export default function Faucet() {
 											placeholder="Enter amount"
 											className="mt-1"
 											min="1"
-											max="1000"
+											max="10000"
 										/>
 										<p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-											Maximum 1000 USDC per transaction
+											Maximum 10.000 USDC per transaction
 										</p>
 									</div>
 

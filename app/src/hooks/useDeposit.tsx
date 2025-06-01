@@ -170,9 +170,6 @@ export const useDeposit = () => {
 					args: [],
 				})) as any;
 
-				// Extract paymentId from initialize receipt
-				// const paymentId = initializeReceipt.logs[0].topics[1]; // Assuming paymentId is emitted in the first log
-
 				setSteps((prev) =>
 					prev.map((item) => {
 						if (item.step === 2) {

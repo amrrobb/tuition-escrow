@@ -16,50 +16,15 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Send, University, DollarSign, FileText } from "lucide-react";
 import { useDeposit } from "@/hooks/useDeposit";
-import { Address } from "viem";
+import { universitiesList } from "@/constants/universities";
 
 interface PaymentFormProps {
 	account: string | null;
 }
-
-interface University {
-	id: string;
-	name: string;
-	address: Address;
-	country: string;
-}
-
-const universities: University[] = [
-	{
-		id: "mit",
-		name: "Massachusetts Institute of Technology",
-		address: "0x87E4D09a1885D840B30E83a4c1Fcddc3da6e18Db",
-		country: "United States",
-	},
-	{
-		id: "oxford",
-		name: "University of Oxford",
-		address: "0x2345678901234567890123456789012345678901",
-		country: "United Kingdom",
-	},
-	{
-		id: "tokyo",
-		name: "University of Tokyo",
-		address: "0x3456789012345678901234567890123456789012",
-		country: "Japan",
-	},
-	{
-		id: "eth",
-		name: "ETH Zurich",
-		address: "0x4567890123456789012345678901234567890123",
-		country: "Switzerland",
-	},
-];
 
 export const PaymentForm = ({ account }: PaymentFormProps) => {
 	const [selectedUniversity, setSelectedUniversity] = useState<string>("");
@@ -80,14 +45,14 @@ export const PaymentForm = ({ account }: PaymentFormProps) => {
 			return;
 		}
 
-		const university = universities.find((u) => u.id === selectedUniversity);
+		const university = universitiesList.find(
+			(u) => u.id === selectedUniversity
+		);
 		if (!university) return;
 
 		setIsLoading(true);
 
 		try {
-			// Here you would interact with your smart contract
-			// For demo purposes, we'll simulate the transaction
 			console.log("Payment Details:", {
 				payer: account,
 				university: university.address,
@@ -117,14 +82,6 @@ export const PaymentForm = ({ account }: PaymentFormProps) => {
 				}
 			);
 
-			// Simulate transaction delay
-			// await new Promise((resolve) => setTimeout(resolve, 2000));
-
-			// toast({
-			// 	title: "Payment Initiated",
-			// 	description: `Payment of ${amount} USDC to ${university.name} has been initiated. Transaction is being processed.`,
-			// });
-
 			// Reset form
 			setSelectedUniversity("");
 			setAmount("");
@@ -142,7 +99,7 @@ export const PaymentForm = ({ account }: PaymentFormProps) => {
 		}
 	};
 
-	const selectedUniversityData = universities.find(
+	const selectedUniversityData = universitiesList.find(
 		(u) => u.id === selectedUniversity
 	);
 
@@ -175,7 +132,7 @@ export const PaymentForm = ({ account }: PaymentFormProps) => {
 									<SelectValue placeholder="Select a university" />
 								</SelectTrigger>
 								<SelectContent>
-									{universities.map((university) => (
+									{universitiesList.map((university) => (
 										<SelectItem
 											key={university.id}
 											value={university.id}
