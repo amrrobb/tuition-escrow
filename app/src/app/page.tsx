@@ -17,7 +17,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { getAddress } from "viem";
 import Link from "next/link";
-import { ADMIN_ADDRESS } from "@/constants/admin-addrress";
+import { ADMIN_ADDRESS } from "@/constants/admin-address";
 
 export default function Home() {
 	const { address, isConnected } = useAccount();

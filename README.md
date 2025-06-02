@@ -69,17 +69,19 @@ cd tuition-escrow
 
 ### 2. Install Dependencies & Compile Contracts
 
+This command will install all required dependencies for both the frontend application and smart contracts, then compile the contracts:
+
 ```bash
 npm run setup
 ```
 
-### 3. Run Tests
+### 3. Run Tests on Smart Contracts
 
 ```bash
 npm run test
 ```
 
-You can find the complete test suite in `contracts/test/TuitionEscrowTest.t.sol`
+You can find the complete test suite in [`contracts/test/TuitionEscrowTest.t.sol`](./contracts/test/TuitionEscrowTest.t.sol)
 
 ---
 
@@ -132,7 +134,6 @@ TUITION_ESCROW_ADDRESS=0x769BBa034B8b5aA1e03a378Fc1d345ea9240a38e
 The live demo uses the following contract configuration. Update these values if deploying your own version:
 
 ```json
-// app/src/constants/contract/contract-address.json
 {
 	"421614": {
 		"TuitionEscrow": "0xF4e4A3Eba75DAb37E2cAC7694a3b5F0965CC70f9",
@@ -141,12 +142,15 @@ The live demo uses the following contract configuration. Update these values if 
 }
 ```
 
+You can find the contract addresses here: [`app/src/constants/contract/contract-address.json`](./app/src/constants/contract/contract-address.json)
+
 Set the admin address used to deploy the contract:
 
 ```ts
-//app/src/constants/admin-addrress.ts
 export const ADMIN_ADDRESS = "0x77C037fbF42e85dB1487B390b08f58C00f438812";
 ```
+
+You can find the admin address here: [`app/src/constants/admin-address.ts`](./app/src/constants/admin-address.ts)
 
 ---
 
@@ -188,19 +192,26 @@ The contract Application Binary Interfaces (ABIs) can be accessed in two locatio
 
 1. Complete contract artifacts including ABIs are available in `contracts/out/`:
 
-   - `TuitionEscrow.sol/TuitionEscrow.json`
-   - `MockToken.sol/MockToken.json`
+   - [`TuitionEscrow.sol/TuitionEscrow.json`](./contracts/out/TuitionEscrow.sol/TuitionEscrow.json)
+   - [`MockToken.sol/MockToken.json`](./contracts/out/MockToken.sol/MockToken.json)
 
 2. Extracted ABI definitions for frontend use are located in `app/src/abi/`:
-   - `TuitionEscrowABI.ts`
-   - `MockTokenABI.ts`
 
-These files contain the interface definitions needed for interacting with the deployed smart contracts.
+   - [`TuitionEscrowABI.ts`](./app/src/abi/TuitionEscrowABI.ts)
+   - [`MockTokenABI.ts`](./app/src/abi/MockTokenABI.ts)
+
+     These files contain the interface definitions needed for interacting with the deployed smart contracts.
 
 ---
 
-## 🤝 Assumptions
+## 🤝 Assumptions & Assignment Details
 
+This project was created as part of a take-home exam. For full assignment details, see:
+[Take-home Exam Requirements](https://learned-balaur-a70.notion.site/Take-home-Exam-web3-20058c1b527580d8aff5cf08806b101d)
+
+Key assumptions for this implementation:
+
+- **Payment Initialization**: Any user can initialize a payment by specifying the payer, university, amount and invoice reference. This creates a unique payment ID for tracking.
 - **Payment Handling**: Deposits, refunds, and releases are tracked by `paymentId`.
 - **Subgraph**: Used to query on-chain data.
 - **Testnet**: Arbitrum Sepolia for low-cost deployment.
@@ -211,7 +222,7 @@ These files contain the interface definitions needed for interacting with the de
 
 ## 🎥 Video Walkthrough
 
-> A 3–5 minute video covering contract deployment, frontend demo, and subgraph queries.  
+> A 3–5 minute video covering contract, frontend demo, and subgraph queries.  
 > [Watch the demo video](https://youtu.be/276fG23WMoA)
 
 ---
